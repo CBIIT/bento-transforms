@@ -1,0 +1,112 @@
+# notes:
+# Defaults section - to prevent having to repeat the same spec for the corresponding
+# keys in the Transform objects
+#
+# Steps can be a list of objects {Package: <pkg>, Entrypoint: <entrypt>}, or
+# if Default.Package is set, a list of strings (all entrypoint names from
+# default package
+#
+Nodes: null
+Relationships: null
+TransformDefinitions:
+  Defaults:
+    Inputs:
+      Model: CCDI
+      Version: 3.1.0
+      Node: null
+    Outputs:
+      Model: CDS
+      Version: 10.0.0
+      Node: null
+    Package: bento-transforms@0.1.0
+
+# Identities: copy values verbatim from source property to dest property
+# full spec: From/To, with Model/Version/Node/Property
+# abbrev spec: when default input and output model/version set, can use
+# a duple list with <node>.<prop> notation
+  Identities:
+    - From:
+        Node: study
+        Prop: study_acronym
+      To:
+        Node: study
+        Prop: acl
+    -
+      - study_personnel.email_address
+      - personnel.email_address
+    -
+      - study.dbgap_accession
+      - study.phs_accession
+    -
+      - study_personnel.personnel_type
+      - investigator.role_or_affiliation
+
+    # note for 'acl', CCDI has file-level access control
+    # so there is a descision required - which acl should
+    # be mapped to a GC study-level acl?
+    # e.g, the most strict control among file levels?
+    -
+      - clinical_measure_file.acl
+      - study.acl
+    -
+      - cytogenomic_file.acl
+      - study.acl
+    -
+      - methylation_array_file.acl
+      - study.acl
+    -
+      - pathology_file.acl
+      - study.acl
+    -
+      - radiology_file.acl
+      - study.acl
+    -
+      - generic_file.acl
+      - study.acl
+    -
+      - sequencing_file.acl
+      - study.acl
+
+  Transforms:
+    fullname_to_fmlnames:
+      Inputs:
+        - Model: CCDI
+          Version: 3.1.0
+          Node: study_personnel
+          Props:
+            - personnel_name
+      Outputs:
+        - Model: CDS
+          Version: 10.0.0
+          Node: investigator
+          Props:
+            - first_name
+            - middle_name
+            - last_name
+      Params:
+        delimiter: " "
+      Steps:
+        - string.split
+    age_days_to_years:
+      Input:
+        - Node: diagnosis
+          Props:
+            - age_at_diagnosis
+      Output:
+        - Node: diagnosis
+          Props:
+            - age_at_diagnosis
+      Params: null # means, use default params
+      Steps:
+        -
+          Package: bento-transforms@0.1.1
+          Entrypoint: arith.days_to_years
+    acl_to_authz:
+      Input:
+        - general_file.acl
+      Output:
+        - study.authz
+      Params:
+        format_string: ""
+      Steps:
+        - string.format
