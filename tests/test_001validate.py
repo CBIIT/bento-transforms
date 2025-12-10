@@ -2,6 +2,7 @@ import pytest
 from pathlib import Path
 from bento_mdf.validator import MDFValidator
 from bento_transforms.mdf import TransformReader
+from pdb import set_trace
 
 tdir = Path("tests/").resolve() if Path("tests").exists() else Path().resolve()
 test_transform_file = tdir / "samples" / "transforms.yaml"
@@ -16,3 +17,6 @@ def test_reader():
                            handle='transforms',
                            mdf_schema=test_mdfschema_file)
     assert tmdf
+    set_trace()
+    assert tmdf.mdf['TransformDefinitions']
+    assert tmdf.mdf_schema['$id']
