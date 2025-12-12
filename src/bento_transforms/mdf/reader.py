@@ -1,5 +1,8 @@
 """
-Load MDF-flavored transformation YAML files to bento-meta objects
+bento_transforms.mdf.reader
+
+Validate and Load MDF-flavored transformation YAML files to a dict
+of standardized Pydantic GeneralTransform instances.
 """
 from __future__ import annotations
 
@@ -63,6 +66,10 @@ class TransformReader(MDFReader):
         else:
             return None
 
+    @property
+    def transforms(self):
+        return self._transforms
+    
     def convert_dict_to_IOSpec(self, spec: dict | List[dict],
                                defaults: EntityDefaults) -> List[IOSpec]:
         def set_defaults_or_die(spec, attr):
@@ -207,7 +214,3 @@ class TransformReader(MDFReader):
                 Params=params,
                 Steps=steps
             )
-                
-
-            
-
