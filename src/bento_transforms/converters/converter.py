@@ -8,15 +8,77 @@ MDB or from an MDF-Tranform YAML file (using bento_transforms.mdf.TransformReade
 
 from __future__ import annotations
 import importlib
+import json
 from toolz import compose_left, curry
-from functools import partial
+from functools import partial, reduce
+from collections import Counter
 from typing import Callable, List, Tuple
 from ..mdf.pymodels import GeneralTransform
+from ..mdf.reader import TransformReader
 from pdb import set_trace
 
+
 class Converter:
-    def __init__(self):
+    def __init__(self, tmdf: TransformReader | None = None, gtfs: List[GeneralTransform] | None = None):
+        self._from_model = None
+        self._to_model = None
+        self._tfnames_by_io = {}
+        self._tfuncs = {}
+        if tmdf:
+            self._transforms = tmdf.transforms
+        elif gtfs:
+            self._transforms = gtfs
+        else:
+            raise RuntimeError("Converter constructor requires either MDF object or dict of GeneralTransforms")
+        # create signature hash table
+        for hdl in self._transforms:
+            self._tfnames_by_io[
+                hash_gtf_by_io(self._transforms[hdl])
+            ] = hdl
         pass
+
+    @property
+    def transforms(self) -> dict:
+        return self._transforms
+
+    @property
+    def from_model(self) -> str:
+        if not self._from_model:
+            ctr = Counter(
+                [(x.Model, x.Version) for x in reduce(
+                    lambda x,y:x+y, [y.Inputs for y in self.transforms.values()])]
+            )
+            self._from_model = ctr.most_common()[0][0]
+        return self._from_model
+
+    @property
+    def to_model(self) -> str:
+        if not self._to_model:
+            ctr = Counter(
+                [(x.Model, x.Version) for x in reduce(
+                    lambda x,y:x+y, [y.Outputs for y in self.transforms.values()])]
+            )
+            self._to_model = ctr.most_common()[0][0]
+        return self._to_model
+
+    def tfunction(self, handle) -> Callable:
+        if not self._tfuncs.get(handle):
+            if not self._transforms.get(handle):
+                raise RuntimeError(f"No such transform '{handle}'")
+            self._tfuncs[handle] = create_transform_function(
+                self._transforms[handle]
+            )
+        return self._tfuncs[handle]
+
+    def convert(self, frm: str | List[str], to: str | List(str)) -> Callable:
+        if isinstance(frm, str):
+            frm = [frm]
+        if isinstance(to, str):
+            to = [to]
+        idx = hash(json.dumps([sorted(frm), sorted(to)]))
+        if not self._tfnames_by_io.get(idx):
+            raise RuntimeError(f"No transformation available with inputs '{frm}' and outputs '{to}'")
+        return self.tfunction(self._tfnames_by_io[idx])
 
 
 def create_transform_function(gtf: GeneralTransform) -> Callable:
@@ -85,8 +147,24 @@ def create_transform_function(gtf: GeneralTransform) -> Callable:
         tf_func = compose_left(*funcs)
 
     wrapper = curry(wrapper)
-    return partial(porcelain, wrapper(func=tf_func, arglist=args, outlist=outs))
-            
-            
+    tf = partial(porcelain, wrapper(func=tf_func, arglist=args, outlist=outs))
+    tf.__setattr__("inputs", gtf.Inputs)
+    tf.__setattr__("outputs", gtf.Outputs)
+    return tf
 
 
+def hash_gtf_by_io(gtf: GeneralTransform) -> int:
+    inp = []
+    out = []
+    for item in gtf.Inputs:
+        node = item.Node
+        for p in item.Props:
+            inp.append(f"{node}.{p}")
+    for item in gtf.Outputs:
+        node = item.Node
+        for p in item.Props:
+            out.append(f"{node}.{p}")
+    inp.sort()
+    out.sort()
+    return hash(json.dumps([inp, out]))
+    
