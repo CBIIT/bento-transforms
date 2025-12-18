@@ -76,6 +76,8 @@ def create_transform_function(gtf: GeneralTransform) -> Callable:
         if step.Params is not None:
             method = curry(method)
             method = method(params=step.Params)
+            if not isinstance(method, Callable):
+                RuntimeError("Didn't get a function back from a curried function; check the transformation implementation")
         funcs.append(method)
     if len(funcs) == 1:
         tf_func = funcs.pop()

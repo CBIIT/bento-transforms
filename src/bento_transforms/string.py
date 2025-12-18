@@ -84,14 +84,14 @@ def split(input: str, params: dict) -> list:
     return input.split(sep=params.delimiter)
 
 
-def add_prefix(input: str, params: StrFuncParams) -> str:
+def add_prefix(input: str, params: dict) -> str:
+    params = StrFuncParams(**params)
     return params.prefix + input
 
 
-def concat_fields(values, delimiter="_", prefix="", suffix="", 
-                  skip_null=True):
+def concat_fields(args, params: dict):
     """
-    Args:
+    in params:
         values: list/tuple of values to concatenate
         delimiter: string joining values
         prefix: prepend to result
@@ -100,19 +100,20 @@ def concat_fields(values, delimiter="_", prefix="", suffix="",
     Returns:
         Concatenated string
     """
-    if not isinstance(values, (list, tuple)):
-        values = [values]
+    params = StrFuncParams(**params)
+    if not isinstance(args, (list, tuple)):
+        args = [args]
 
-    if skip_null:
-        clean_values = [str(v) for v in values 
-                       if v is not None and str(v).strip()]
+    if params.skip_null:
+        clean_values = [str(v) for v in args 
+                        if v is not None and str(v).strip()]
     else:
         clean_values = [str(v) if v is not None else "" 
-                       for v in values]
+                        for v in args]
 
-    result = delimiter.join(clean_values)
-    if prefix:
-        result = f"{prefix}{result}"
-    if suffix:
-        result = f"{result}{suffix}"
+    result = params.delimiter.join(clean_values)
+    if params.prefix:
+        result = f"{params.prefix}{result}"
+    if params.suffix:
+        result = f"{result}{params.suffix}"
     return result

@@ -116,9 +116,9 @@ class TransformReader(MDFReader):
 
     def convert_dict_to_TfStepSpec(self, spec: dict, defaults: PackageC | None) -> TfStepSpec:
         if spec.get("Package") is None:
-            if defaults in None:
+            if defaults is None:
                 raise RuntimeError(f"Package is not defined, with no default (processing {spec}")
-            spec["Package"] = defaults.Package
+            spec["Package"] = defaults.model_dump()
             spec["Package"]["Name"] = spec["Package"]["Name"].replace("-","_")
             
         elif isinstance(spec["Package"], str):

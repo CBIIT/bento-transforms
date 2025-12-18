@@ -39,4 +39,14 @@ TransformDefinitions:
           Package: bento-transforms@0.1.1
           Params:
             delimiter: " "
-      
+
+    lookup_and_prefix:
+      Inputs:
+        - participant.race
+      Outputs:
+        - participant.race
+      Steps:
+        - Entrypoint: lookup.race_ccdi_to_cds
+        - Entrypoint: string.concat_fields
+          Params:
+            prefix: "GC:"

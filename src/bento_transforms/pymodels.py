@@ -25,6 +25,7 @@ class Y2DParams(BaseModel):
 class UuidNS(BaseModel):
     namespace: UuidNSEnum = UuidNSEnum.DNS
 
+
 class StrFuncParams(BaseModel):
     prefix: str | None = None
     suffix: str | None  = None
@@ -34,4 +35,5 @@ class StrFuncParams(BaseModel):
     replacement: str | None = None
     flags: int = 0
     default: str | None = None
+    skip_null: bool = False
     
