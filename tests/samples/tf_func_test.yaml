@@ -16,7 +16,7 @@ TransformDefinitions:
   Identities:
     -
       - study_personnel.email_address
-      - personnel.email_address
+      - investigator.email
       
   Transforms:
     fullname_to_fmlnames:

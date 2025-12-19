@@ -6,7 +6,7 @@ from bento_meta.objects import Node, Property
 from bento_meta.tf_objects import Transform, TfStep
 
 
-def create_tf_and_steps(tf: Transform):
+def create_tf_and_steps(tf: Transform) -> dict:
     stmts = []
     tfn_id = make_nanoid()
     tfn = mc.N(label="transform",
@@ -27,32 +27,78 @@ def create_tf_and_steps(tf: Transform):
     # merge nodes
     svals = list(stepns.values())
     stmts.append(
-        mc.Statement(mc.Merge(tfn))
+        mc.Statement(mc.Merge(tfn), terminate=True)
     )
     for stpn in svals:
         stmts.append(
-            mc.Statement(mc.Merge(stpn))
+            mc.Statement(mc.Merge(stpn), terminate=True)
         )
     # link nodes
     stmts.extend([
         mc.Statement(
             mc.Match(tfn, first(svals)),
-            mc.Merge(mc.R(Type="first_step").relate(tfn.var(), first(svals).var()))
+            mc.With(tfn.plain_var(), first(svals).plain_var()),
+            mc.Merge(mc.R(Type="first_tf_step").relate(tfn.plain_var(),
+                                                       first(svals).plain_var())),
+            terminate=True
         ),
         mc.Statement(
             mc.Match(tfn, last(svals)),
-            mc.Merge(mc.R(Type="last_step").relate(tfn.var(), last(svals).var()))
+            mc.With(tfn.plain_var(), last(svals).plain_var()),
+            mc.Merge(mc.R(Type="last_tf_step").relate(tfn.plain_var(),
+                                                      last(svals).plain_var())),
+            terminate=True
         ),
     ])
     for (a_stepn, b_stepn) in pairwise(svals):
         stmts.append(
             mc.Statement(
                 mc.Match(a_stepn, b_stepn),
-                mc.Merge(mc.R(Type="next_step").relate(a_stepn.var(), b_stepn.var()))
+                mc.With(a_stepn.plain_var(), b_stepn.plain_var()),
+                mc.Merge(mc.R(Type="next_tf_step").relate(a_stepn.plain_var(),
+                                                          b_stepn.plain_var())),
+                terminate=True
+            )
+        )
+    return {"tf_nanoid": tfn_id, "stmts": stmts}
+    
+
+def link_tf_to_io(tf_nanoid: str, tf: Transform) -> list:
+    stmts = []
+    tfn = mc.N(label="transform",
+               props=[mc.P(handle="nanoid", value=tf_nanoid)])
+    for prop in tf.input_props.values():
+        t = t_from_property(prop)
+        stmts.append(
+            mc.Statement(
+                mc.Match(t, tfn),
+                mc.With(t.nodes()[1].plain_var(),
+                         tfn.plain_var()),
+                mc.Merge(
+                    mc.R(Type="value_as_tf_input").relate(
+                         t.nodes()[1].plain_var(),
+                         tfn.plain_var())
+                ),
+                terminate=True
+            )
+        )
+    for prop in tf.output_props.values():
+        t = t_from_property(prop)
+        stmts.append(
+            mc.Statement(
+                mc.Match(t, tfn),
+                mc.With(tfn.plain_var(),
+                        t.nodes()[1].plain_var()),
+                mc.Merge(
+                    mc.R(Type="tf_output_as_value").relate(
+                        tfn.plain_var(),
+                        t.nodes()[1].plain_var())
+                ),
+                terminate=True
             )
         )
     return stmts
-    
+
 
 def t_from_property(prop: Property):
     # find node

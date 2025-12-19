@@ -8,8 +8,12 @@ from __future__ import annotations
 
 import json
 import logging
-import minicypher as mc
 from ..mdf.pymodels import GeneralTransform
+from .mc_utils import (
+    create_tf_and_steps,
+    link_tf_to_io
+)
+    
 from bento_meta.objects import Node, Property
 from bento_meta.tf_objects import Transform, TfStep
 
@@ -24,7 +28,17 @@ class TransformModel:
     def transforms(self):
         return self._transforms
 
+    def cypher_for_upsert(self) -> List[str]:
+        stmts = []
+        for tf in self.transforms.values():
+            ss = create_tf_and_steps(tf)
+            stmts.extend(ss['stmts'])
+            stmts.extend(
+                link_tf_to_io(ss['tf_nanoid'], tf)
+            )
+        return stmts
                  
+
 def gtf_to_tf_graph(gtf: GeneralTransform, handle: str) -> Transform:
     tf = Transform({"handle": handle})
     nodes = {}
