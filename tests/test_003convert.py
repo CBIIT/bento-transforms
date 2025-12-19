@@ -32,7 +32,7 @@ def test_tf_functions(samplesd):
     # identity
     tf_func = create_transform_function(
         tmdf.transforms[
-            "study_personnel_email_address_to_personnel_email_address"
+            "study_personnel_email_address_to_investigator_email"
         ]
     )
 
@@ -67,7 +67,7 @@ def test_converter(samplesd):
                                        "investigator.middle_name"]),
                       Callable)
     assert isinstance(cvtr.convert("study_personnel.email_address",
-                                   "personnel.email_address"),
+                                   "investigator.email"),
                       Callable)
     with pytest.raises(RuntimeError, match="study_personell"):
         cvtr.convert(frm="study_personell.personnel_name",
