@@ -12,6 +12,7 @@ classifiers = [
 dependencies = [
     "bento-mdf",
     "bento-meta",
+    "minicypher>=0.1.3",
     "pydantic>=2.12.4",
     "toolz>=1.1.0",
 ]

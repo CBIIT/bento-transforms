@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import minicypher as mc
 from ..mdf.pymodels import GeneralTransform
 from bento_meta.objects import Node, Property
 from bento_meta.tf_objects import Transform, TfStep
@@ -70,6 +71,7 @@ def gtf_to_tf_graph(gtf: GeneralTransform, handle: str) -> Transform:
             first_step = False
         if prev_step is not None:
             prev_step.next_step = step
-            prev_step = step
+        prev_step = step
     tf.last_step = step
     return tf
+

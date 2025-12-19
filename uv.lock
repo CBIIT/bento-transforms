@@ -280,6 +280,7 @@ source = { editable = "." }
 dependencies = [
     { name = "bento-mdf" },
     { name = "bento-meta" },
+    { name = "minicypher" },
     { name = "pydantic" },
     { name = "toolz" },
 ]
@@ -300,6 +301,7 @@ dev = [
 requires-dist = [
     { name = "bento-mdf", directory = "../../../Code/bento-mdf/python" },
     { name = "bento-meta", directory = "../../../Code/bento-meta/python" },
+    { name = "minicypher", specifier = ">=0.1.3" },
     { name = "myst-nb", marker = "extra == 'dev'", specifier = ">=1.0.0,<2.0.0" },
     { name = "pydantic", specifier = ">=2.12.4" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.2.0,<8.0.0" },
