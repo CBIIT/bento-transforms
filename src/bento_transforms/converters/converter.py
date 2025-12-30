@@ -2,8 +2,9 @@
 bento_transforms.converters.Converter class
 This object can convert _data values_ under one Model to _data values_
 under another model, according to Transform information provided as
-GeneralTransform Pydantic objects. The bento-meta objects can be created by reading from an
-MDB or from an MDF-Tranform YAML file (using bento_transforms.mdf.TransformReader).
+GeneralTransform Pydantic objects. The objects can be created by reading
+from an MDB or from an MDF-Tranform YAML file
+(using bento_transforms.mdf.TransformReader).
 """
 
 from __future__ import annotations
@@ -15,11 +16,11 @@ from collections import Counter
 from typing import Callable, List, Tuple
 from ..mdf.pymodels import GeneralTransform
 from ..mdf.reader import TransformReader
-from pdb import set_trace
 
 
 class Converter:
-    def __init__(self, tmdf: TransformReader | None = None, gtfs: List[GeneralTransform] | None = None):
+    def __init__(self, tmdf: TransformReader | None = None,
+                 gtfs: List[GeneralTransform] | None = None):
         self._from_model = None
         self._to_model = None
         self._tfnames_by_io = {}
@@ -29,13 +30,13 @@ class Converter:
         elif gtfs:
             self._transforms = gtfs
         else:
-            raise RuntimeError("Converter constructor requires either MDF object or dict of GeneralTransforms")
+            raise RuntimeError("Converter constructor requires either MDF"
+                               "object or dict of GeneralTransforms")
         # create signature hash table
         for hdl in self._transforms:
             self._tfnames_by_io[
                 hash_gtf_by_io(self._transforms[hdl])
             ] = hdl
-        pass
 
     @property
     def transforms(self) -> dict:
@@ -124,16 +125,23 @@ def create_transform_function(gtf: GeneralTransform) -> Callable:
     for step in gtf.Steps:
         mod = step.Package.Name
         if (mod == "Identity"):
-            funcs.append(lambda x:x)
+            funcs.append(lambda x: x)
             continue
         ep = step.Entrypoint.split(".")
         mth = ep.pop()
+        method = None
         if len(ep) > 0:
-            mod = ".".join([mod]+ep)
-        module = importlib.import_module(mod)
-        if hasattr(module, mth):
-            method = getattr(module, mth)
-        else:
+            qmod = ".".join([mod]+ep)
+        try:
+            module = importlib.import_module(qmod)
+            if hasattr(module, mth):
+                method = getattr(module, mth)
+        except ModuleNotFoundError:
+            # check if imported to the top level via __init__.py
+            module = importlib.import_module(".".join([mod, "__init__"]))
+            if hasattr(module, ".".join(ep)):
+                method = getattr(getattr(module, ".".join(ep)), mth)
+        if method is None:
             raise RuntimeError(f"Module {mod} has no method '{mth}'")
         if step.Params is not None:
             method = curry(method)

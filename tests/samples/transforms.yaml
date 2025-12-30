@@ -86,8 +86,8 @@ TransformDefinitions:
             - middle_name
             - last_name
       Steps:
-        - Entrypoint: string.split
-          Package: bento-transforms@0.1.1
+        - Package: bento-transforms@0.1.1
+          Entrypoint: string.split
           Params:
             delimiter: " "
     age_days_to_years:

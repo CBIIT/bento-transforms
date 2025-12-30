@@ -58,14 +58,21 @@ def test_converter(samplesd):
     assert isinstance(cvtr.tfunction('fullname_to_fmlnames'), Callable)
     with pytest.raises(RuntimeError, match="No such transform"):
         cvtr.tfunction("narb")
-    assert isinstance(cvtr.convert(frm="study_personnel.personnel_name",
-                                   to=["investigator.first_name", "investigator.middle_name",
-                                       "investigator.last_name"]),
-                      Callable)
-    assert isinstance(cvtr.convert(frm="study_personnel.personnel_name",
-                                   to=["investigator.last_name", "investigator.first_name",
-                                       "investigator.middle_name"]),
-                      Callable)
+    assert isinstance(
+        
+        cvtr.convert(frm="study_personnel.personnel_name",
+                     to=["investigator.first_name", "investigator.middle_name",
+                         "investigator.last_name"]),
+
+        Callable)
+
+    ans = cvtr.convert(
+        frm="study_personnel.personnel_name",
+        to=["investigator.first_name", "investigator.middle_name",
+            "investigator.last_name"])("James Earl Jones")
+
+    assert ans["investigator_first_name"] == "James"
+
     assert isinstance(cvtr.convert("study_personnel.email_address",
                                    "investigator.email"),
                       Callable)
