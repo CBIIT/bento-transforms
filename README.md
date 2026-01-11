@@ -1,3 +1,5 @@
+![Build Status](https://github.com/CBIIT/bento-transforms/actions/workflows/ci-cd.yml/badge.svg)
+
 # bento-transforms - Open system for specifying and automating data transformations
 
 Transforming data submitted or stored under one model into data valid under a different model is a fundamental requirement for interoperability in a federated system having distributed aspects of data governance. This is the case in the NCI data systems FNL/BACS/CTOS supports and manages.
