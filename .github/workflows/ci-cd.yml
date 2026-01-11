@@ -6,6 +6,7 @@ jobs:
   test-build:
     uses: CBIIT/bento-workflows/.github/workflows/test-build.yml@v3.0.25
     with:
+      workdir: .
       versions: |
         ["3.10","3.11","3.12","3.13"]
       no-test-mdb: true
