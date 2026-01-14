@@ -1,0 +1,374 @@
+Nodes: null
+Relationships: null
+TransformDefinitions:
+  Defaults:
+    Inputs:
+      Model: CCDI
+      Node: null
+      Version: v3.1.0
+    Outputs:
+      Model: CDS
+      Node: null
+      Version: v10.0.0
+    Package:
+      Name: bento-transforms
+      Version: 0.1.0
+  Identities:
+    - - clinical_measure_file.file_name
+      - file.file_name
+    - - cytogenomic_file.file_name
+      - file.file_name
+    - - methylation_array_file.file_name
+      - file.file_name
+    - - pathology_file.file_name
+      - file.file_name
+    - - radiology_file.file_name
+      - file.file_name
+    - - generic_file.file_name
+      - file.file_name
+    - - sequencing_file.file_name
+      - file.file_name
+    - - clinical_measure_file.data_category
+      - study.study_data_types
+    - - cytogenomic_file.data_category
+      - study.study_data_types
+    - - methylation_array_file.data_category
+      - study.study_data_types
+    - - pathology_file.data_category
+      - study.study_data_types
+    - - radiology_file.data_category
+      - study.study_data_types
+    - - generic_file.data_category
+      - study.study_data_types
+    - - sequencing_file.data_category
+      - study.study_data_types
+    - - clinical_measure_file.file_type
+      - file.file_type
+    - - cytogenomic_file.file_type
+      - file.file_type
+    - - methylation_array_file.file_type
+      - file.file_type
+    - - pathology_file.file_type
+      - file.file_type
+    - - radiology_file.file_type
+      - file.file_type
+    - - generic_file.file_type
+      - file.file_type
+    - - sequencing_file.file_type
+      - file.file_type
+    - - clinical_measure_file.file_description
+      - file.file_description
+    - - cytogenomic_file.file_description
+      - file.file_description
+    - - methylation_array_file.file_description
+      - file.file_description
+    - - pathology_file.file_description
+      - file.file_description
+    - - radiology_file.file_description
+      - file.file_description
+    - - generic_file.file_description
+      - file.file_description
+    - - sequencing_file.file_description
+      - file.file_description
+    - - clinical_measure_file.file_size
+      - file.file_size
+    - - cytogenomic_file.file_size
+      - file.file_size
+    - - methylation_array_file.file_size
+      - file.file_size
+    - - pathology_file.file_size
+      - file.file_size
+    - - radiology_file.file_size
+      - file.file_size
+    - - generic_file.file_size
+      - file.file_size
+    - - sequencing_file.file_size
+      - file.file_size
+    - - clinical_measure_file.md5sum
+      - file.md5sum
+    - - cytogenomic_file.md5sum
+      - file.md5sum
+    - - methylation_array_file.md5sum
+      - file.md5sum
+    - - pathology_file.md5sum
+      - file.md5sum
+    - - radiology_file.md5sum
+      - file.md5sum
+    - - generic_file.md5sum
+      - file.md5sum
+    - - sequencing_file.md5sum
+      - file.md5sum
+    - - clinical_measure_file.file_mapping_level
+      - file.file_mapping_level
+    - - cytogenomic_file.file_mapping_level
+      - file.file_mapping_level
+    - - methylation_array_file.file_mapping_level
+      - file.file_mapping_level
+    - - pathology_file.file_mapping_level
+      - file.file_mapping_level
+    - - radiology_file.file_mapping_level
+      - file.file_mapping_level
+    - - generic_file.file_mapping_level
+      - file.file_mapping_level
+    - - sequencing_file.file_mapping_level
+      - file.file_mapping_level
+    - - clinical_measure_file.file_access
+      - study.acl
+    - - cytogenomic_file.file_access
+      - study.acl
+    - - methylation_array_file.file_access
+      - study.acl
+    - - pathology_file.file_access
+      - study.acl
+    - - radiology_file.file_access
+      - study.acl
+    - - generic_file.file_access
+      - study.acl
+    - - sequencing_file.file_access
+      - study.acl
+    - - clinical_measure_file.acl
+      - study.acl
+    - - cytogenomic_file.acl
+      - study.acl
+    - - methylation_array_file.acl
+      - study.acl
+    - - pathology_file.acl
+      - study.acl
+    - - radiology_file.acl
+      - study.acl
+    - - generic_file.acl
+      - study.acl
+    - - sequencing_file.acl
+      - study.acl
+    - - clinical_measure_file.authz
+      - study.acl
+    - - cytogenomic_file.authz
+      - study.acl
+    - - methylation_array_file.authz
+      - study.acl
+    - - pathology_file.authz
+      - study.acl
+    - - radiology_file.authz
+      - study.acl
+    - - generic_file.authz
+      - study.acl
+    - - sequencing_file.authz
+      - study.acl
+    - - clinical_measure_file.file_url
+      - file.file_url_in_cds
+    - - clinical_measure_file.file_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - cytogenomic_file.file_url
+      - file.file_url_in_cds
+    - - cytogenomic_file.file_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - methylation_array_file.file_url
+      - file.file_url_in_cds
+    - - methylation_array_file.file_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - pathology_file.file_url
+      - file.file_url_in_cds
+    - - pathology_file.file_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - radiology_file.file_url
+      - file.file_url_in_cds
+    - - radiology_file.file_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - generic_file.file_url
+      - file.file_url_in_cds
+    - - generic_file.file_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - sequencing_file.file_url
+      - file.file_url_in_cds
+    - - sequencing_file.file_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - consent_group.consent_group_suffix
+      - consent_group.consent_group_id
+    - - diagnosis.diagnosis
+      - diagnosis.morphology
+    - - diagnosis.diagnosis_category
+      - diagnosis.morphology
+    - - diagnosis.tumor_grade_source
+      - diagnosis.tumor_grade
+    - - genetic_analysis.method
+      - file.experimental_strategy_and_data_subtypes
+    - - genetic_analysis.reference_genome
+      - genomic_info.reference_genome_assembly
+    - - genetic_analysis.hgvs_genome
+      - genomic_info.reference_genome_assembly
+    - - laboratory_test.specimen
+      - sample.sample_type_category
+    - - participant.sex_at_birth
+      - participant.sex
+    - - pathology_file.image_modality
+      - image.image_modality
+    - - pathology_file.image_modality
+      - NonDICOMradiologyAllModalities.performed_imaging_study_nonAcquisitionModalitiesInStudyCode
+    - - radiology_file.image_modality
+      - image.image_modality
+    - - radiology_file.image_modality
+      - NonDICOMradiologyAllModalities.performed_imaging_study_nonAcquisitionModalitiesInStudyCode
+    - - pathology_file.magnification
+      - MultiplexMicroscopy.nominal_magnification
+    - - pathology_file.magnification
+      - NonDICOMpathologyImages.nominal_magnification
+    - - pathology_file.fixation_embedding_method
+      - MultiplexMicroscopy.embedding_medium
+    - - pathology_file.fixation_embedding_method
+      - NonDICOMpathologyImages.embedding_medium
+    - - pathology_file.slim_url
+      - file.file_url_in_cds
+    - - pathology_file.slim_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - pdx.tumor_confirmed_not_to_be_mus_or_ebv_origin
+      - pdx.tumor_not_mus_or_ebv_origin
+    - - radiology_file.magnetic_field_strength
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_magneticFieldStrength
+    - - radiology_file.scanner_manufacturer
+      - image.imaging_equipment_manufacturer
+    - - radiology_file.scanner_manufacturer
+      - proteomic.instrument_make
+    - - radiology_file.scanner_model
+      - image.imaging_equipment_model
+    - - radiology_file.scanner_model
+      - proteomic.proteomic_instrument_model
+    - - radiology_file.scanner_model
+      - proteomic.manufacturer_model_name
+    - - radiology_file.slice_thickness
+      - NonDICOMradiologyAllModalities.performed_imaging_study_sliceThickness
+    - - radiology_file.echoPulseSequenceCategoryCode
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_echoPulseSequenceCategoryCode
+    - - radiology_file.diffusionBValue
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_diffusionBValue
+    - - radiology_file.diffusionDirectionalityCode
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_diffusionDirectionalityCode
+    - - radiology_file.resonantNucleusCode
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_resonantNucleusCode
+    - - radiology_file.acquisitionContrastCode
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_acquisitionContrastCode
+    - - radiology_file.inversionRecoveryIndicator
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_inversionRecoveryIndicator
+    - - radiology_file.pulseSequenceName
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_pulseSequenceName
+    - - radiology_file.multipleSpinEchoIndicator
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_multipleSpinEchoIndicator
+    - - radiology_file.phaseContrastIndicator
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_phaseContrastIndicator
+    - - radiology_file.timeOfFlightContrastIndicator
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_timeOfFlightContrastIndicator
+    - - radiology_file.arterialSpinLabelingContrastCode
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_acquisitionContrastCode
+    - - radiology_file.steadyStatePulseSequenceCode
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_steadyStatePulseSequenceCode
+    - - radiology_file.echoPlanarPulseSequenceIndicator
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_echoPlanarPulseSequenceIndicator
+    - - radiology_file.saturationRecoveryIndicator
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_saturationRecoveryIndicator
+    - - radiology_file.spectrallySelectedSuppressionCode
+      - NonDICOMMRimages.MRImageAcquisitionProtocolElement_spectrallySelectedSuppressionCode
+    - - radiology_file.complexImageComponentCode
+      - NonDICOMMRimages.MRImageReconstructionProtocolElement_complexImageComponentCode
+    - - sample.participant_age_at_collection
+      - sample.sample_age_at_collection
+    - - sequencing_file.library_id
+      - genomic_info.library_id
+    - - sequencing_file.library_selection
+      - genomic_info.library_selection
+    - - sequencing_file.library_strategy
+      - genomic_info.library_strategy
+    - - sequencing_file.library_layout
+      - genomic_info.library_layout
+    - - sequencing_file.library_source_material
+      - genomic_info.library_source_material
+    - - sequencing_file.number_of_reads
+      - genomic_info.number_of_reads
+    - - sequencing_file.design_description
+      - genomic_info.design_description
+    - - sequencing_file.platform
+      - genomic_info.platform
+    - - sequencing_file.instrument_model
+      - genomic_info.instrument_model
+    - - sequencing_file.avg_read_length
+      - genomic_info.avg_read_length
+    - - sequencing_file.coverage
+      - genomic_info.coverage
+    - - sequencing_file.reference_genome_assembly
+      - genomic_info.reference_genome_assembly
+    - - sequencing_file.custom_assembly_fasta_file_for_alignment
+      - genomic_info.custom_assembly_fasta_file_for_alignment
+    - - sequencing_file.sequence_alignment_software
+      - genomic_info.sequence_alignment_software
+    - - sequencing_file.protocols_link
+      - image.citation_or_DOI
+    - - sequencing_file.protocols_link
+      - image.imaging_protocol
+    - - study.dbgap_accession
+      - study.phs_accession
+    - - study.external_url
+      - file.file_url_in_cds
+    - - study.external_url
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - study.experimental_strategy_and_data_subtype
+      - file.experimental_strategy_and_data_subtypes
+    - - study_admin.organism_species
+      - study.organism_species
+    - - study_admin.adult_or_childhood_study
+      - study.adult_or_childhood_study
+    - - study_admin.file_types_and_format
+      - file.file_type
+    - - study_admin.number_of_participants
+      - study.number_of_participants
+    - - study_admin.number_of_samples
+      - study.number_of_samples
+    - - study_funding.funding_agency
+      - study.funding_agency
+    - - study_funding.grant_id
+      - study.grant_id
+    - - study_funding.funding_source_program_name
+      - study.funding_source_program_name
+    - - study_personnel.personnel_type
+      - investigator.role_or_affiliation
+    - - study_personnel.email_address
+      - investigator.email
+    - - survival.last_known_survival_status
+      - diagnosis.vital_status
+    - - synonym.data_location
+      - file.file_url_in_cds
+    - - synonym.data_location
+      - MultiplexMicroscopy.channel_metadata_file_url_in_cds
+    - - treatment_response.response
+      - treatment.response
+    - - consent_group.consent_group_id
+      - consent_group.consent_group_id
+  Transforms:
+    fullname_to_fmlnames:
+      Inputs:
+        - Model: CCDI
+          Version: 3.1.0
+          Node: study_personnel
+          Props:
+            - personnel_name
+      Outputs:
+        - Model: CDS
+          Version: 10.0.0
+          Node: investigator
+          Props:
+            - first_name
+            - middle_name
+            - last_name
+      Steps:
+        - Entrypoint: string.split
+          Package: bento-transforms@0.1.1
+          Params:
+            delimiter: " "
+
+    lookup_and_prefix:
+      Inputs:
+        - participant.race
+      Outputs:
+        - participant.race
+      Steps:
+        - Entrypoint: lookup.race_ccdi_to_cds
+        - Entrypoint: string.concat_fields
+          Params:
+            prefix: "GC:"
