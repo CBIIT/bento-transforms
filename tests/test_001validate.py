@@ -25,6 +25,14 @@ def test_reader(samplesd):
     assert tf.Steps[1].Params is None
 
 
+def test_err_transforms_should_allow_identical_input_output(samplesd):
+    tmdf = TransformReader(samplesd / "tdp.yaml",
+                           handle="transforms",
+                           mdf_schema=samplesd / "mdf-schema-tf.yaml")
+    
+    assert tmdf
+    
+
 def test_err_missing_default_in_From(samplesd):
     with pytest.raises(RuntimeError, match="Version not specified"):
         TransformReader(samplesd / "err_1.yaml",

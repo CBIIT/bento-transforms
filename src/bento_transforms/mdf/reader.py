@@ -18,6 +18,8 @@ from typing import List
 from pathlib import Path
 from bento_mdf import MDFReader
 
+from pdb import set_trace
+
 
 class TransformReader(MDFReader):
     """MDF class for reading the MDF-Transform format into bento-meta objects"""
