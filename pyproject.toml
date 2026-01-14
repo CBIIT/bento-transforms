@@ -37,5 +37,5 @@ build-backend = "hatchling.build"
 packages = ["src/bento_transforms"]
 sources = ["src"]
 
-[tool.uv.sources]
-bento-mdf = { path = "../bento-mdf/python" }
+#[tool.uv.sources]
+#bento-mdf = { path = "../bento-mdf/python" }

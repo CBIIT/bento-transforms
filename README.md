@@ -58,4 +58,6 @@ the same.
 
 ## [Execute Transformations](/src/bento_transforms/converters)
 
-
+The Converter object turns transform specifications into actual Python functions, 
+and indexes the functions by the transform name, or by the input and output
+property names. 
