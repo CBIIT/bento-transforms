@@ -6,10 +6,7 @@ from bento_meta.tf_objects import Transform, TfStep
 
 def test_meta_graph(samplesd):
     meta_tfs = {}
-    tmdf = TransformReader(samplesd / "transforms.yaml",
-                           handle='transforms',
-                           mdf_schema=samplesd / "mdf-schema-tf.yaml")
-    
+    tmdf = TransformReader(samplesd / "transforms.yaml", handle='transforms')
     tmdl = TransformModel(tmdf.transforms)
     assert tmdl
     

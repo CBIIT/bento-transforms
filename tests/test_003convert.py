@@ -9,9 +9,7 @@ from pdb import set_trace
 
 
 def test_tf_functions(samplesd):
-    tmdf = TransformReader(samplesd / "tf_func_test.yaml",
-                           handle='transforms',
-                           mdf_schema=samplesd / "mdf-schema-tf.yaml")
+    tmdf = TransformReader(samplesd / "tf_func_test.yaml", handle='transforms')
     tf_func = create_transform_function(
         tmdf.transforms['fullname_to_fmlnames']
     )
@@ -46,9 +44,8 @@ def test_tf_functions(samplesd):
 
 
 def test_converter(samplesd):
-    tmdf = TransformReader(samplesd / "tf_func_test.yaml",
-                           handle='transforms',
-                           mdf_schema=samplesd / "mdf-schema-tf.yaml")
+    tmdf = TransformReader(samplesd / "tf_func_test.yaml", handle='transforms')
+
     cvtr = Converter(tmdf=tmdf)
     assert cvtr
 
