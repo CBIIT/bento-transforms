@@ -25,18 +25,19 @@ class Converter:
         self._to_model = None
         self._tfnames_by_io = {}
         self._tfuncs = {}
+        self._signatures = {}
         if tmdf:
             self._transforms = tmdf.transforms
         elif gtfs:
             self._transforms = gtfs
         else:
             raise RuntimeError("Converter constructor requires either MDF"
-                               "object or dict of GeneralTransforms")
+                               "object or list of GeneralTransforms")
         # create signature hash table
         for hdl in self._transforms:
-            self._tfnames_by_io[
-                hash_gtf_by_io(self._transforms[hdl])
-            ] = hdl
+            (h, inp, out) = hash_gtf_by_io(self._transforms[hdl])
+            self._tfnames_by_io[h] = hdl
+            self._signatures[hdl] = {"inputs": inp, "outputs": out}
 
     @property
     def transforms(self) -> dict:
@@ -174,5 +175,5 @@ def hash_gtf_by_io(gtf: GeneralTransform) -> int:
             out.append(f"{node}.{p}")
     inp.sort()
     out.sort()
-    return hash(json.dumps([inp, out]))
+    return (hash(json.dumps([inp, out])), inp, out)
     
