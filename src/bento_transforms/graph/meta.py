@@ -33,8 +33,18 @@ _GET_TRANSFORMS_QRY = (
 
 class TransformModel:
     def __init__(self, gtfs: dict[str, GeneralTransform] | None = None,
-                 mdb: MDB | None = None):
+                 mdb: MDB | None = None,
+                 from_model: str | None = None,
+                 from_version: str | None = None,
+                 to_model: str | None = None,
+                 to_version: str | None = None,
+                 default_package: str | None = None):
         self.mdb = mdb
+        self.from_model = from_model
+        self.from_version = from_version
+        self.to_model = to_model
+        self.to_version = to_version
+        self.default_package = default_package  # format: "package@version" or "package"
         self._transforms = {}
         if gtfs is not None:
             for (hdl, tf) in gtfs.items():
@@ -55,6 +65,98 @@ class TransformModel:
             self._transforms = {}
             return
         self._transforms = records_to_gtfs(records)
+
+    def add_transform(
+        self,
+        input_prop: str,
+        output_prop: str,
+        handle: str | None = None,
+        from_model: str | None = None,
+        from_version: str | None = None,
+        to_model: str | None = None,
+        to_version: str | None = None,
+        steps: list[str] | None = None,
+        package: str | None = None,
+    ) -> str:
+        """Add a transform to the model.
+
+        Args:
+            input_prop: Input property in "node.prop" format.
+            output_prop: Output property in "node.prop" format.
+            handle: Transform handle. Auto-generated if not provided.
+            from_model: Input model name. Falls back to instance default.
+            from_version: Input model version. Falls back to instance default.
+            to_model: Output model name. Falls back to instance default.
+            to_version: Output model version. Falls back to instance default.
+            steps: List of transform steps as "module.method" strings.
+                   If None, creates an identity transform.
+            package: Package in "name@version" or "name" format.
+                     Falls back to instance default_package.
+
+        Returns:
+            The handle of the created transform.
+
+        Raises:
+            ValueError: If required model/version info is missing.
+        """
+        # Resolve model/version defaults
+        in_model = from_model or self.from_model
+        in_version = from_version or self.from_version
+        out_model = to_model or self.to_model
+        out_version = to_version or self.to_version
+
+        if not in_model or not in_version:
+            raise ValueError(
+                "Input model and version required. Provide from_model/from_version "
+                "or set instance defaults."
+            )
+        if not out_model or not out_version:
+            raise ValueError(
+                "Output model and version required. Provide to_model/to_version "
+                "or set instance defaults."
+            )
+
+        # Parse input/output node.prop
+        in_node, in_prop = _parse_node_prop(input_prop)
+        out_node, out_prop = _parse_node_prop(output_prop)
+
+        # Auto-generate handle if not provided
+        if handle is None:
+            handle = f"{in_node}_{in_prop}_to_{out_node}_{out_prop}"
+
+        # Build IOSpecs
+        input_iospec = IOSpec(
+            Model=in_model, Version=in_version, Node=in_node, Props=[in_prop]
+        )
+        output_iospec = IOSpec(
+            Model=out_model, Version=out_version, Node=out_node, Props=[out_prop]
+        )
+
+        # Build Steps
+        if steps is None:
+            # Identity transform
+            step_specs = [TfStepSpec(Package=PackageC(Name="Identity"), Entrypoint="identity")]
+        else:
+            # Resolve package
+            pkg_str = package or self.default_package
+            if not pkg_str:
+                raise ValueError(
+                    "Package required for non-identity transforms. Provide package= "
+                    "or set instance default_package."
+                )
+            pkg = _parse_package(pkg_str)
+            step_specs = [
+                TfStepSpec(Package=pkg, Entrypoint=step_str)
+                for step_str in steps
+            ]
+
+        gtf = GeneralTransform(
+            Inputs=[input_iospec],
+            Outputs=[output_iospec],
+            Steps=step_specs,
+        )
+        self._transforms[handle] = gtf
+        return handle
 
     def cypher_for_upsert(self) -> List[str]:
         stmts = []
@@ -180,3 +282,19 @@ def _io_records_to_iospecs(io_records: list[dict]) -> list[IOSpec]:
         IOSpec(Model=model, Version=version, Node=node_handle, Props=props)
         for (model, version, node_handle), props in grouped.items()
     ]
+
+
+def _parse_node_prop(node_prop: str) -> tuple[str, str]:
+    """Parse 'node.prop' string into (node, prop) tuple."""
+    if '.' not in node_prop:
+        raise ValueError(f"Invalid format '{node_prop}': expected 'node.prop'")
+    parts = node_prop.split('.', 1)
+    return parts[0], parts[1]
+
+
+def _parse_package(pkg_str: str) -> PackageC:
+    """Parse 'package@version' or 'package' string into PackageC."""
+    if '@' in pkg_str:
+        name, version = pkg_str.split('@', 1)
+        return PackageC(Name=name, Version=version)
+    return PackageC(Name=pkg_str, Version=None)
