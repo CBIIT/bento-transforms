@@ -158,7 +158,7 @@ class TransformModel:
         self._transforms[handle] = gtf
         return handle
 
-    def cypher_for_upsert(self) -> List[str]:
+    def store_transforms_cypher(self) -> List[str]:
         stmts = []
         for tf in self.transforms.values():
             ss = create_tf_and_steps(tf)

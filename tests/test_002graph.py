@@ -178,7 +178,6 @@ def test_parse_package_with_version():
     assert pkg.Name == "bento_transforms"
     assert pkg.Version == "0.1.1"
 
-
 def test_parse_package_without_version():
     pkg = _parse_package("my_package")
     assert pkg.Name == "my_package"

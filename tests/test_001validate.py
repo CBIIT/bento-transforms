@@ -25,7 +25,7 @@ def test_reader(samplesd):
 
 
 def test_err_transforms_should_allow_identical_input_output(samplesd):
-    tmdf = TransformReader(samplesd / "tdp.yaml",handle="transforms")
+    tmdf = TransformReader(samplesd / "tdp.yaml", handle="transforms")
     assert tmdf
     
 

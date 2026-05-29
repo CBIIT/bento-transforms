@@ -7,6 +7,7 @@ from bento_meta.tf_objects import Transform, TfStep
 
 
 def create_tf_and_steps(tf: Transform) -> dict:
+    "Emit Cypher to merge the transform node/transform steps subgraph into database."
     stmts = []
     tfn_id = make_nanoid()
     tfn = mc.N(label="transform",
@@ -64,6 +65,10 @@ def create_tf_and_steps(tf: Transform) -> dict:
     
 
 def link_tf_to_io(tf_nanoid: str, tf: Transform) -> list:
+    """
+    Emit Cypher to merge relationships between the transform
+    (already in database) to its input and output properties
+    """
     stmts = []
     tfn = mc.N(label="transform",
                props=[mc.P(handle="nanoid", value=tf_nanoid)])
@@ -73,7 +78,7 @@ def link_tf_to_io(tf_nanoid: str, tf: Transform) -> list:
             mc.Statement(
                 mc.Match(t, tfn),
                 mc.With(t.nodes()[1].plain_var(),
-                         tfn.plain_var()),
+                        tfn.plain_var()),
                 mc.Merge(
                     mc.R(Type="value_as_tf_input").relate(
                          t.nodes()[1].plain_var(),
