@@ -10,3 +10,7 @@ wheels/
 
 # Virtual environments
 .venv
+venv
+
+# vim temp files
+*.sw*
