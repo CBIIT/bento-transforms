@@ -1,0 +1,41 @@
+Nodes: null
+Relationships: null
+TransformDefinitions:
+  Defaults:
+    Inputs:
+      Model: CCDI
+      Version: 3.1.0
+      Node: null
+    Outputs:
+      Model: CDS
+      Version: 10.0.0
+      Node: null
+    Package:
+      Name: bento-transforms
+      Version: 0.1.0
+  Identities:
+    -
+      - study_personnel.email_address
+      - investigator.email
+      
+  Transforms:
+    test_internal_transform:
+      Inputs:
+        - Model: CCDI
+          Version: 3.1.0
+          Node: study_personnel
+          Props:
+            - personnel_name
+      Outputs:
+        - Model: CDS
+          Version: 10.0.0
+          Node: investigator
+          Props:
+            - first_name
+            - middle_name
+            - last_name
+      Steps:
+        - Entrypoint: tflib.tf1.transform_local_test
+          Package: bento-transforms@0.1.1
+          Params:
+            prefix: "how about this "
