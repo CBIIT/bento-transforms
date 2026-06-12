@@ -9,21 +9,27 @@ from pdb import set_trace
 
 
 def test_tf_functions(samplesd):
+    # loads the TDF from the specified file
     tmdf = TransformReader(samplesd / "tf_func_test.yaml", handle='transforms')
+    # creates one of the functions
     tf_func = create_transform_function(
         tmdf.transforms['fullname_to_fmlnames']
     )
+    # verifies that it's callable
     assert isinstance(tf_func, Callable)
 
+    # calls the function, checking the inputs and outputs
     ret = tf_func("Sigismund Leonhart Popbutton")
     assert tf_func.inputs[0].Node == "study_personnel"
     assert tf_func.outputs[0].Props == ["first_name", "middle_name",
                                         "last_name"]
     assert len(ret) == 3
 
+    # calls the function again with an argument on the name and checks the return
     ret = tf_func(study_personnel_personnel_name="Sigismund Leonhart Popbutton")
     assert ret['investigator_middle_name'] == "Leonhart"
 
+    # checks if it raises an error with unexpected arguments
     with pytest.raises(RuntimeError, match="Valid input keys are"):
         tf_func(**{"squidward": "Sigismund Leonhart Popbutton"})
 
